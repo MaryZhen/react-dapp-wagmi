@@ -3,9 +3,10 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 function Header() {
 
   return (
-    <>
-    <ConnectButton />
-    </>
+    <div className='header'>
+      <div className='logo'>My Wagmi Project</div>
+      <ConnectButton />
+    </div>
   )
 }
 

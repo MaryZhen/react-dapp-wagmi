@@ -4,6 +4,8 @@ import { readContract } from '@wagmi/core'
 import contractABI from '../abi/TodoContract.json'
 import { useState } from 'react'
 import config from '../util/config'
+import { Card } from 'antd'
+import WithDraw from './WithDraw'
 
 function Todo() {
     const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS
@@ -26,7 +28,11 @@ function Todo() {
         }
     }, [contractAddress])
     return (
-        <div>{balance}</div>
+      <Card title="Balance">
+          <div style={{fontSize: '24px', fontWeight: 'bolder', marginBottom: '30px'}}>{balance}</div>
+          <WithDraw />
+      </Card>
+        
     )
 }
 

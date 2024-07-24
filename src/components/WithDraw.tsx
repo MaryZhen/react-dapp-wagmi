@@ -38,7 +38,7 @@ function WithDraw() {
     return (
         <>
         <Button type="primary" onClick={getWithdraw} disabled={!isConnected}>
-            <Spin spinning={isWithdraw} />我要提款
+            <Spin spinning={isWithdraw} />withdraw
         </Button>
         </>
     )

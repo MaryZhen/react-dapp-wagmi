@@ -1,7 +1,7 @@
 import { type BaseError, useWriteContract, useAccount } from 'wagmi'
 import { parseEther } from 'viem'
 import contractABI from '../abi/TodoContract.json'
-import { message, Input, Button } from 'antd'
+import { message, Input, Button, Card } from 'antd'
 import { useState } from 'react'
 function Todo() {
   const [msg, setMsg] = useState<string>('')
@@ -22,11 +22,11 @@ function Todo() {
         value: parseEther('0.005'),
       })
       setMsg('')
-      console.log("发布消息", result)
-      message.success('发布消息成功!')
+      console.log("sendmessage", result)
+      message.success('send message success!')
     } catch (error) {
       console.error('error', error)
-      message.error(`发布消息失败：${(error as BaseError)?.details}`)
+      message.error(`send message failed ${(error as BaseError)?.details}`)
     }
   }
 
@@ -36,15 +36,15 @@ function Todo() {
   }
   
   return (
-      <>
-        <div className="item">
-        <Input value={msg} count={{
-          show: true,
-          max: 50,
-        }} maxLength={50} placeholder="请输入消息内容" onInput={handleChange}></Input>
-        <Button type='primary' loading={ isLoading } onClick={publishMsg} disabled={!isConnected || !msg}>{isPending ? '确认中...' : '发布消息'}</Button>
-      </div>
-      </>
+      <Card title="SendMessage">
+          <div style={{fontSize: '24px', fontWeight: 'bolder', marginBottom: '30px'}}>
+            <Input value={msg} count={{
+            show: true,
+            max: 50,
+          }} maxLength={50} placeholder="please input message" onInput={handleChange}></Input>
+          </div>
+          <Button type='primary' loading={ isLoading } onClick={publishMsg} disabled={!isConnected || !msg}>{isPending ? 'Confirming...' : 'send message'}</Button>
+      </Card>
   )
 }
 

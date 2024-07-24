@@ -18,23 +18,23 @@ interface DataType {
   
   const columns: TableProps<DataType>['columns'] = [
     {
-      title: '编号',
+      title: 'id',
       dataIndex: 'id',
       key: 'id',
       render: (text) => <span>{text.toString()}</span>,
     },
     {
-      title: '接收者',
+      title: 'author',
       dataIndex: 'author',
       key: 'author',
     },
     {
-      title: '消息',
+      title: 'message',
       dataIndex: 'message',
       key: 'message',
     },
     {
-      title: '时间戳',
+      title: 'timestamp',
       dataIndex: 'timestamp',
       key: 'timestamp',
       render: (text) => (<span>{timestampToDateTime(Number(text))}</span>),
