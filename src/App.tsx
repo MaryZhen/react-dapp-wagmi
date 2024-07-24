@@ -1,11 +1,18 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import Header from './components/Header'
+import WithDraw from './components/WithDraw'
+import Balance from './components/Balance'
+import PublishMessage from './components/PublishMessage'
+import MessageList from './components/MessageList'
 
 function App() {
-
   return (
-    <>
-    <ConnectButton />
-    </>
+    <div className="App">
+      <Header />
+      <WithDraw />
+      <Balance />
+      <PublishMessage />
+      <MessageList />
+    </div>
   )
 }
 

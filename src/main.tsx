@@ -26,7 +26,7 @@ const config = getDefaultConfig({
   appName: 'My Wagmi Project',
   projectId: '9320576b52fea108db7634255b1cd746',
   chains: [mainnet, polygon, optimism, arbitrum, base, sepolia],
-  ssr: true, // If your dApp uses server side rendering (SSR)
+  // ssr: true, // If your dApp uses server side rendering (SSR)
 });
 const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')!).render(
