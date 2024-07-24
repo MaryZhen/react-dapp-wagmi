@@ -37,13 +37,26 @@ function Todo() {
   
   return (
       <Card title="SendMessage">
-          <div style={{fontSize: '24px', fontWeight: 'bolder', marginBottom: '30px'}}>
-            <Input value={msg} count={{
-            show: true,
-            max: 50,
-          }} maxLength={50} placeholder="please input message" onInput={handleChange}></Input>
+          <div style={{marginBottom: '30px'}}>
+            <Input
+              value={msg} count={{
+                show: true,
+                max: 50,
+              }}
+              size='large'
+              maxLength={50}
+              placeholder="please input message"
+              onInput={handleChange}
+            ></Input>
           </div>
-          <Button type='primary' loading={ isLoading } onClick={publishMsg} disabled={!isConnected || !msg}>{isPending ? 'Confirming...' : 'send message'}</Button>
+          <Button
+            type='primary'
+            loading={ isLoading }
+            onClick={publishMsg}
+            disabled={!isConnected || !msg}
+          >
+            {isPending ? 'Confirming...' : 'send message'}
+          </Button>
       </Card>
   )
 }
