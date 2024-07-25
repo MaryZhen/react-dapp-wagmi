@@ -14,7 +14,7 @@ export default function Login() {
         <div className="loginContainer">
             <div className="loginImg" />
             <ConnectButton />
-            <div className='desc'>Click the button to sign up using a wallet!</div>
+            <div className='desc'>Please click the button to sign in with signature!</div>
         </div>
     )
 }
