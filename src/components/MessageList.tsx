@@ -1,10 +1,10 @@
 // src/components/Todo.tsx
 import { readContract } from '@wagmi/core'
-import { useCallback, useState } from 'react'
-import { type BaseError, useAccount } from 'wagmi'
+import { useEffect, useState } from 'react'
+import {  useAccount } from 'wagmi'
 import config from '../util/config'
 import contractABI from '../abi/TodoContract.json'
-import { message, Table } from 'antd'
+import { Table } from 'antd'
 import type { TableProps } from 'antd'
 import { timestampToDateTime } from '../util'
 
@@ -37,29 +37,31 @@ interface DataType {
       title: 'timestamp',
       dataIndex: 'timestamp',
       key: 'timestamp',
-      render: (text) => (<span>{timestampToDateTime(Number(text))}</span>),
+      render: (text) => {
+        const timestamp = Number(text)
+        const res = timestampToDateTime(timestamp)
+        return (<span>{res}</span>)
+      } ,
     },
   ];
 function Todo() {
     const { isConnected, chainId } = useAccount()
-    const [messageApi, contextHolder] = message.useMessage()
     const [todoList, setTodoList] = useState<DataType[]>([])
     const [loading, setLoading] = useState<boolean>(false)
 
     const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS
 
     // 读取消息列表
-    useCallback(async () => {
-        setLoading(true)
-        setTodoList([])
-        try {
-          const result = await readContract(config, {
-            address: contractAddress,
-            abi: contractABI.abi,
-            functionName: 'getTodoList',
-          })
-          console.log('读取消息列表', result)
+    useEffect(() => {
+      setLoading(true)
+      setTodoList([])
+        readContract(config, {
+          address: contractAddress,
+          abi: contractABI.abi,
+          functionName: 'getPlayList',
+        }).then(result => {
           const arr = (result as DataType[])
+          console.info('读取消息列表', arr)
           if (arr && arr.length) {
             const dataSource = arr.map((item: DataType) => {
               return {
@@ -70,25 +72,19 @@ function Todo() {
                 timestamp: item.timestamp.toString(),
               }
             }).sort((a, b) => Number(b.timestamp) - Number(a.timestamp))
-
+            console.info('dataSource', dataSource)
             setTodoList(dataSource)
           }
           setLoading(false)
-        } catch (error) {
+        }).catch(error => {
           setLoading(false)
           console.error('error', error)
-          messageApi.open({
-            type: 'error',
-            duration: 4,
-            content: `读取消息列表失败：${(error as BaseError)?.details || (error as BaseError)?.shortMessage}`,
-          })
-        }
-    }, [])
+        })
+    }, [contractAddress, isConnected, chainId])
     
     return (
         <>
-        {contextHolder}
-        <Table loading={loading} columns={columns} dataSource={isConnected && chainId === 1337 ? todoList : []} pagination={{ pageSize: 6 }} />
+        <Table loading={loading} columns={columns} dataSource={todoList} pagination={{ pageSize: 6 }} />
         </>
     )
 }

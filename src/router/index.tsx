@@ -2,7 +2,7 @@ import {
     createBrowserRouter,
     createRoutesFromElements,
     Route,
-    useNavigate
+    redirect,
   } from "react-router-dom";
 import Root from "./Root";
 import ErrorPage from './ErrorPage'
@@ -10,29 +10,46 @@ import MessageList from '../components/MessageList'
 import PublishMessage from '../components/PublishMessage'
 import Balance from '../components/Balance'
 import Login from '../components/Login'
-// function RequireAuth({ children:<React.Fragment> }) {
-//   const navigate = useNavigate();
-//   const isAuthenticated = false;
+import React from "react";
 
-//   if (!isAuthenticated) {
-//     navigate('/', { replace: true });
-//   }
-//   return children
-// }
-const isAuthenticated = true
+interface RouteElement {
+  path: string,
+  element: React.ReactNode,
+  children?: RouteElement[],
+}
+function getAuth() {
+  const account = localStorage.getItem('account')
+  return account
+}
+const RouteList: RouteElement[] = [
+  { path: "/", element: <Balance /> },
+  { path: "dashboard", element: <Balance /> },
+  { path: "sendMessage", element: <PublishMessage /> },
+  { path: "messageList", element: <MessageList /> },
+]
+const loader = async () => {
+  const user = getAuth(); // 假设 getAuth 返回认证状态或用户信息
 
-const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
-          <Route path="*" element={<ErrorPage />} />
-          <Route path="/" element={isAuthenticated ? <Balance /> : <Login />} />
-          <Route path="dashboard" element={isAuthenticated ? <Balance /> : <Login />} />
-          <Route
-            path="sendMessage"
-            element={isAuthenticated ? <PublishMessage /> : <Login />}
-          />
-          <Route path="messageList" element={isAuthenticated ? <MessageList /> : <Login />} />
-      </Route>
+  if (!user) {
+    return redirect("/login");
+  }
+  return null;
+};
+    const router = createBrowserRouter(
+      createRoutesFromElements(
+        <>
+          <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
+              { RouteList.map((item) => {
+                return <Route
+                  path={item.path}
+                  element={item.element}
+                  key={item.path + Math.random()}
+                  loader={loader}
+                />
+              }) }
+          </Route>
+          <Route path="login" element={<Login />} key="login" />
+        </>
+      )
     )
-  );
 export default router;

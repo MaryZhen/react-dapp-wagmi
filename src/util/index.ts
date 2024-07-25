@@ -1,6 +1,6 @@
 export function timestampToDateTime(timestamp: number ) {
     // 创建一个新的Date对象，传入时间戳
-    const date = new Date(timestamp);
+    const date = new Date(timestamp * 1000);
 
     // 使用Date对象的方法获取年、月、日、时、分、秒
     const year = date.getFullYear();

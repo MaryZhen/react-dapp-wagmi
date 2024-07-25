@@ -1,28 +1,11 @@
 import HeaderCus from './components/Header'
-// import WithDraw from './components/WithDraw'
-// import Balance from './components/Balance'
-// import PublishMessage from './components/PublishMessage'
-// import MessageList from './components/MessageList'
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <Header />
-//       <WithDraw />
-//       <Balance />
-//       <PublishMessage />
-//       <MessageList />
-//     </div>
-//   )
-// }
-
-// export default App
+import { useAccountEffect } from 'wagmi'
 import {
   SendOutlined,
   TableOutlined,
   HomeOutlined,
 } from '@ant-design/icons';
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import type { MenuProps } from 'antd/es/menu';
@@ -50,6 +33,14 @@ const items: MenuItem[] = [
 ]
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate()  
+  useAccountEffect({
+    onDisconnect() {
+      console.log('Disconnected!')
+      localStorage.removeItem('account')
+      navigate('/login')
+    },
+  })
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
